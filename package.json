@@ -1,0 +1,27 @@
+{
+  "name": "implementing-middlewares",
+  "version": "0.1.0",
+  "description": "creating a logger middleware",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/weber-stef/Implementing-Middlewares.git"
+  },
+  "author": "Stefan Wruck <vitatech@gmx.de>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/weber-stef/Implementing-Middlewares/issues"
+  },
+  "homepage": "https://github.com/weber-stef/Implementing-Middlewares#readme",
+  "dependencies": {
+    "color-convert": "^2.0.0",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.1"
+  }
+}

@@ -21,8 +21,12 @@ const colorHandler = (req, res, colorCase) => {
   // const color = convert.rgb.colorCase(...myColor);
   const color = convert.rgb[colorCase](...myColor);
   const [hue, saturation, luminance] = color;
-  console.log(`Cool cat, so you found out, what ${myColor} is looking like, when being converted to ${colorCase}`);
-  return res.json({ hue, saturation, luminance });
+  console.log(`ROCK: ${color[hue]}`);
+
+  const convertedChannels = res.json({ hue, saturation, luminance });
+  console.log(`ROLL: ${color[hue]}`)
+  console.log(`Cool cat, so you found out, what ${myColor} is becoming ${color.hue} , when being converted to ${colorCase}`);
+  return convertedChannels;
 };
 app.use(function (req, res, next) {
   if (!req.query.color) {

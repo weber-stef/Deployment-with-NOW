@@ -1,11 +1,14 @@
 {
-  "name": "implementing-middlewares",
+  "name": "deployment-with-now",
   "version": "0.1.0",
   "description": "creating a logger middleware",
   "main": "index.js",
   "scripts": {
+    "start": "npm run dev && npm run open",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "devserver": "live-server --browser=Chrome",
+    "open": "start http://localhost:3000"
   },
   "repository": {
     "type": "git",

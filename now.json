@@ -3,7 +3,7 @@
   "name": "Deployment-with-NOW",
   "builds": [
     {
-      "src": "app.js",
+      "src": "index.js",
       "use": "@now/node"
     }
   ],

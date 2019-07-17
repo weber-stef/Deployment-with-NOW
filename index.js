@@ -3,72 +3,67 @@ const app = express();
 const convert = require("color-convert");
 const fs = require("fs");
 const port = 3000;
-const router = express.Router();
-
-// // jQuery -> $
-// (function ($, undefined) {
-//   $('.button')
-// })(document.querySelectorAll)
-//   // Mootools -> $
-//   (function ($) {
-//     $.mootools()
-//   })(mootools)
-
-
 //How my search-parameters get converted
-const colorHandler = (req, res, colorCase) => {
+const colorHandler = (req, res, convertFrom, convertTo) => {
   const myColor = req.query.color.split(",").map(channel => parseInt(channel));
-  // const color = convert.rgb.colorCase(...myColor);
-  const color = convert.rgb[colorCase](...myColor);
-  const [hue, saturation, luminance] = color;
-  console.log(`ROCK: ${color[hue]}`);
+  // const color = convert.convertFrom.convertTo(...myColor);
+  const color = convert[convertFrom][convertTo](...myColor);
+  console.log(convertTo);
+  let convertedChannels;
+  let myConversionTo;
+  // empty variable defined, which later on can be filled  with different entries from my if-cases
+  if (convertTo === "hsl") {
+    const [hue, saturation, luminance] = color;
+    convertedChannels = res.json({ hue, saturation, luminance });
+  }
+  else if (convertTo === "hex") {
+    convertedChannels = res.json({ hex: color });
+    const myConversionTo = color;
+    console.log(`So you found out,that ${convertFrom} ${myColor} is becoming ${myConversionTo} , when being converted to ${convertTo}`);
+  }
+  else if (convertTo === "rgb") {
+    const [red, green, blue] = color;
+    convertedChannels = res.json({ red, green, blue });
+    const myConversionTo = { red, green, blue };
+  }
+  else {
+    convertedChannels = res.json({ error: { message: "This conversion is not allowed." } });
+  }
 
-  const convertedChannels = res.json({ hue, saturation, luminance });
-  console.log(`ROLL: ${color[hue]}`)
-  console.log(`Cool cat, so you found out, what ${myColor} is becoming ${color.hue} , when being converted to ${colorCase}`);
   return convertedChannels;
 };
+
 app.use(function (req, res, next) {
-  if (!req.query.color) {
-    res.status(500).send("No color");
-    console.log("Color parameter is missing")
-  } else {
-    console.log('color there');
+  // see also "javascript - falesy values" (!req.query.color) is noot working here, because NULL, FALSE and undefined and 0 would all be false values
+  if ("color" in req.query) {
     next();
   }
+  else {
+    console.log('no color present in your query');
+    return res.status(400).send("Please add the color-parameter to your query");
+  }
+
 });
 app.get("/convert/:colorConversionMode", function (req, res) {
   const { colorConversionMode } = req.params
   switch (colorConversionMode) {
-    // in case I want to convert rgb to --- hsl
-    case "hsl":
-      colorHandler(req, res, 'hsl');
+    // - convert rgb to hsl
+    case "rgb-hsl":
+      colorHandler(req, res, 'rgb', 'hsl');
       break;
-
+    // convert rgb to hex
+    case "rgb-hex":
+      colorHandler(req, res, 'rgb', 'hex');
+      break;
+    // - convert hex to rgb
+    case "hex-rgb":
+      colorHandler(req, res, 'hex', 'rgb');
+      break;
     default:
       res.status(400).json({ error: `Route ${colorConversionMode} is not supported.` })
       break;
   }
+
 })
 
-
-
-
-
-
-
-//////////////////////////
-
-//////////////////////////////////////
-
-// router.use('/1', function (req, res, next) {
-//   console.log('Requested Route:', req.originalUrl, 'HTTP-Method used:', req.method);
-//   next();
-// }, function (req, res, next) {
-//   res.send("1. task accomplished, as far as I can tell..");
-
-// });
-
 app.listen(port, () => console.log(`Example app listening on port ${port}`));
-// mount the router on the app
-// app.use('/', router);
